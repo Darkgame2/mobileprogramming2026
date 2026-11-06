@@ -3,7 +3,10 @@ package com.learntospell.myapplication;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Adapter;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,6 +14,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import java.util.ArrayList;
 
 public class RingkasanHasil extends AppCompatActivity {
 
@@ -25,6 +30,12 @@ public class RingkasanHasil extends AppCompatActivity {
         int benar = intent.getIntExtra("JUMLAH_BENAR", 0);
         int salah = intent.getIntExtra("JUMLAH_SALAH", 0);
         int jumlah_soal = intent.getIntExtra("JUMLAH_SOAL", 0);
+        ArrayList<String> soalSalah = intent.getStringArrayListExtra("DAFTAR_SALAH");
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, soalSalah);
+
+
+        ListView listSalah = findViewById(R.id.listSalah);
+        listSalah.setAdapter(adapter);
 
         TextView summaryText = findViewById(R.id.ringkasan);
         summaryText.setText(" Level: " + level + "\n Benar: " + benar +

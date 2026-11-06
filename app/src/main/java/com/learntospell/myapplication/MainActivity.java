@@ -34,7 +34,7 @@ import java.util.Scanner;
 public class MainActivity extends AppCompatActivity {
 
     private HashMap<String, String> kamusEasy, kamusMedium, kamusDifficult, kamus;
-    private ArrayList<String> kataEasy, kataMedium, kataDifficult, kata;
+    private ArrayList<String> kataEasy, kataMedium, kataDifficult, kata, listSalah;
     int JUMLAH_OPSI=5, JUMLAH_SOAL=3, soalKe=0;
     private RecyclerView rvOpsi;
     private OpsiAdapter adapter;
@@ -103,6 +103,8 @@ public class MainActivity extends AppCompatActivity {
         kamusDifficult = new HashMap<>();
         kataDifficult = new ArrayList<>();
 
+        listSalah = new ArrayList<>();
+
         readFromFile(R.raw.vocab_easy, kamusEasy, kataEasy);
         readFromFile(R.raw.vocab_medium, kamusMedium, kataMedium);
         readFromFile(R.raw.vocab_difficult, kamusDifficult, kataDifficult);
@@ -135,8 +137,6 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
-
-
         letsPlay();
     }
 
@@ -151,6 +151,7 @@ public class MainActivity extends AppCompatActivity {
         soalKe = 0;
         skorBenar = 0;
         skorSalah = 0;
+        listSalah.clear();
         letsPlay();
     }
 
@@ -162,6 +163,7 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra("JUMLAH_SALAH", skorSalah);
         intent.putExtra("JUMLAH_SOAL", JUMLAH_SOAL);
         intent.putExtra("LEVEL", kodeLevel());
+        intent.putStringArrayListExtra("DAFTAR_SALAH", listSalah);
         startActivity(intent);
 
         mulaiSesiBaru();
@@ -196,6 +198,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void letsPlay() {
 
+        textSkor.setText("Soal no : "+ (soalKe+1) + " Benar : " + skorBenar + "  Salah: " + skorSalah);
         if (soalKe >= JUMLAH_SOAL){
             selesaiSesi();
             return;
@@ -236,6 +239,7 @@ public class MainActivity extends AppCompatActivity {
             textHasil.setText("Benar!");
         } else {
             skorSalah++;
+            listSalah.add(soal + ": " + benar);
             textHasil.setText("Salah. Jawaban benar: " + benar);
         }
         updateSkor();
