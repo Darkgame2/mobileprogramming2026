@@ -22,10 +22,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.learntospell.myapplication" />
+                  <option name="mobileSdkAppId" value="1:561750756922:android:9f65622e676f7057c76f03" />
+                  <option name="projectId" value="vocabulary-game-b989c" />
+                  <option name="projectNumber" value="561750756922" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

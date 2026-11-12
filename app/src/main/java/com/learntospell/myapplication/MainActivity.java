@@ -73,6 +73,15 @@ public class MainActivity extends AppCompatActivity {
         // pilihLevel(radioGroupLevel.getCheckedRadioButtonId());
 
 
+        Button crashButton = findViewById(R.id.crashButton);
+
+        crashButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                throw new RuntimeException("Test Crash"); // Memaksa aplikasi force close
+            }
+        });
+
         textHasil = findViewById(R.id.hasil);
         rvOpsi = findViewById(R.id.opsi);
         rvOpsi.setLayoutManager(new LinearLayoutManager(this));
@@ -349,5 +358,7 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG_LC, "onSaveInstanceState, skor=" + skorBenar + "/" + skorSalah
         + radioGroupLevel.getCheckedRadioButtonId());
     }
+
+
 
 }
