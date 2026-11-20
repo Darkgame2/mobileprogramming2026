@@ -100,33 +100,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <Button
-        android:id="@+id/crashButton"
-        android:layout_width="0dp"
-        android:layout_height="38dp"
-        android:layout_marginTop="16dp"
-        android:text="Test crash"
-        app:layout_constraintTop_toBottomOf="@id/radioGroupLevel"
-        app:layout_constraintStart_toStartOf="parent"/>
-
-    <Button
-        android:id="@+id/btnGoogleSignIn"
-        android:layout_width="100dp"
-        android:layout_height="38dp"
-        android:text="Sign-In"
-        android:layout_marginTop="5dp"
-        app:layout_constraintTop_toBottomOf="@+id/skor"
-        app:layout_constraintEnd_toEndOf="@id/radioGroupLevel"
-        />
-
-    <Button
-        android:id="@+id/btnLogout"
-        android:layout_width="95dp"
-        android:layout_height="38dp"
-        android:text="Logout"
-        android:layout_marginTop="0dp"
-        app:layout_constraintTop_toBottomOf="@id/btnGoogleSignIn"
-        app:layout_constraintEnd_toEndOf="@id/radioGroupLevel"
-        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
