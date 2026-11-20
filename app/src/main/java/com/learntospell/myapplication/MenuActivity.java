@@ -91,7 +91,6 @@ public class MenuActivity extends AppCompatActivity {
             Intent intent = new Intent(MenuActivity.this, MainActivity.class);
             startActivity(intent);
         });
-        updateUI(mAuth.getCurrentUser());
     }
 
     private void firebaseAuthWithGoogle(String idToken) {
@@ -124,8 +123,8 @@ public class MenuActivity extends AppCompatActivity {
             btnLogout.setVisibility(View.VISIBLE);
 
             // PILIH SALAH SATU CARA (Buka kunci tombol Mulai Main):
-            btnMain.setEnabled(true);              // Cara 1: Tombol aktif & bisa diklik
-            btnLeaderboard.setEnabled(true);
+            btnMain.setVisibility(View.VISIBLE);              // Cara 1: Tombol aktif & bisa diklik
+            btnLeaderboard.setVisibility(View.VISIBLE);
             // btnMain.setVisibility(View.VISIBLE); // Cara 2: Munculkan tombol jika pakai Gone
 
             Toast.makeText(this, "Terhubung Firebase: " + user.getDisplayName(), Toast.LENGTH_SHORT).show();
@@ -136,8 +135,8 @@ public class MenuActivity extends AppCompatActivity {
             btnLogout.setVisibility(View.GONE);
 
             // PILIH SALAH SATU CARA (Kunci tombol Mulai Main):
-            btnMain.setEnabled(false);             // Cara 1: Tombol nonaktif (abu-abu)
-            btnLeaderboard.setEnabled(false);
+            btnMain.setVisibility(View.GONE);             // Cara 1: Tombol nonaktif (abu-abu)
+            btnLeaderboard.setVisibility(View.GONE);
             // btnMain.setVisibility(View.GONE);    // Cara 2: Sembunyikan tombol sepenuhnya
         }
     }
