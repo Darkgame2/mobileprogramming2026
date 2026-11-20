@@ -1,16 +1,17 @@
 package com.learntospell.myapplication;
 
+import android.app.Activity;
+import android.view.View;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowCompat;
-import androidx.core.view.WindowInsetsCompat;
 
-//import tambahan utk authentication
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -21,27 +22,21 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import android.app.Activity;
-import android.util.Log;
-import android.widget.Button;
-import android.widget.Toast;
 
 public class MenuActivity extends AppCompatActivity {
 
-    //untuk authentication
     private FirebaseAuth mAuth;
     private GoogleSignInClient mGoogleSignInClient;
     private ActivityResultLauncher<Intent> googleSignInLauncher;
     private static final String TAG_LC = "Lifecycle";
-
+    private Button btnGoogleSignIn, btnLogout, btnMain, btnLeaderboard;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
 
+        // 1. Inisialisasi Firebase Auth & Google Sign-In
         mAuth = FirebaseAuth.getInstance();
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -68,14 +63,37 @@ public class MenuActivity extends AppCompatActivity {
                 }
         );
 
-        Button btnGoogleSignIn = findViewById(R.id.btnGoogleSignIn);
+        // 2. Tombol Login Google
+        btnGoogleSignIn = findViewById(R.id.btnGoogleSignIn);
+        btnLogout = findViewById(R.id.btnLogout);
+        btnMain = findViewById(R.id.btnMain);
+        btnLeaderboard = findViewById(R.id.btnLeaderboard);
+
         btnGoogleSignIn.setOnClickListener(v -> {
             Intent signInIntent = mGoogleSignInClient.getSignInIntent();
             googleSignInLauncher.launch(signInIntent);
         });
+
+        // Listener Tombol Logout
+        btnLogout.setOnClickListener(v -> {
+            // 1. Keluar dari sesi Firebase Authentication
+            mAuth.signOut();
+
+            // 2. Keluar dari Google Client agar pop-up pilih akun muncul lagi saat login berikutnya
+            mGoogleSignInClient.signOut().addOnCompleteListener(this, task -> {
+                Toast.makeText(MenuActivity.this, "Berhasil Logout", Toast.LENGTH_SHORT).show();
+                updateUI(null);
+            });
+        });
+
+        // 3. Tombol Pindah ke Halaman Game (MainActivity)
+        btnMain.setOnClickListener(v -> {
+            Intent intent = new Intent(MenuActivity.this, MainActivity.class);
+            startActivity(intent);
+        });
+        updateUI(mAuth.getCurrentUser());
     }
 
-    //method pembantu google
     private void firebaseAuthWithGoogle(String idToken) {
         AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
         mAuth.signInWithCredential(credential)
@@ -101,8 +119,26 @@ public class MenuActivity extends AppCompatActivity {
 
     private void updateUI(FirebaseUser user) {
         if (user != null) {
+            // Kondisi SUDAH LOGIN
+            btnGoogleSignIn.setVisibility(View.GONE);
+            btnLogout.setVisibility(View.VISIBLE);
+
+            // PILIH SALAH SATU CARA (Buka kunci tombol Mulai Main):
+            btnMain.setEnabled(true);              // Cara 1: Tombol aktif & bisa diklik
+            btnLeaderboard.setEnabled(true);
+            // btnMain.setVisibility(View.VISIBLE); // Cara 2: Munculkan tombol jika pakai Gone
+
             Toast.makeText(this, "Terhubung Firebase: " + user.getDisplayName(), Toast.LENGTH_SHORT).show();
             Log.d("FirebaseAuth", "User aktif: " + user.getEmail() + " | UID: " + user.getUid());
+        } else {
+            // Kondisi BELUM LOGIN / SUDAH LOGOUT
+            btnGoogleSignIn.setVisibility(View.VISIBLE);
+            btnLogout.setVisibility(View.GONE);
+
+            // PILIH SALAH SATU CARA (Kunci tombol Mulai Main):
+            btnMain.setEnabled(false);             // Cara 1: Tombol nonaktif (abu-abu)
+            btnLeaderboard.setEnabled(false);
+            // btnMain.setVisibility(View.GONE);    // Cara 2: Sembunyikan tombol sepenuhnya
         }
     }
 
@@ -146,5 +182,4 @@ public class MenuActivity extends AppCompatActivity {
         Log.d(TAG_LC, "onDestroy, isFinishing=" + isFinishing()
                 + ", isChangingConfigurations=" + isChangingConfigurations());
     }
-
 }
